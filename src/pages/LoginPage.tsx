@@ -2,78 +2,118 @@ import React, { useState } from 'react';
 import {
   Alert,
   Box,
+  Button,
   Divider,
-  IconButton,
   Link,
-  Paper,
   Snackbar,
   Typography
 } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
-import AppleIcon from '@mui/icons-material/Apple';
-import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
-import { signInWithPopup } from 'firebase/auth';
+import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
+import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup, type Auth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { LoginForm } from '../components/LoginForm';
-import { auth, googleProvider, isFirebaseConfigured } from '../services/firebase';
-import meditationIllustration from '../assets/meditation-illustration.svg';
+import studyIllustration from '../assets/study-illustration.svg';
+
+// Firebase configuration from Vite environment variables (.env)
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
+};
+
+// Check whether valid Firebase credentials have been configured
+const isFirebaseConfigured = Boolean(
+  firebaseConfig.apiKey &&
+  firebaseConfig.apiKey !== 'undefined' &&
+  firebaseConfig.apiKey !== '' &&
+  !firebaseConfig.apiKey.includes('your_')
+);
+
+// Safely initialize Firebase with configured credentials
+let auth: Auth | null = null;
+let googleProvider: GoogleAuthProvider | null = null;
+
+if (isFirebaseConfigured) {
+  try {
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    googleProvider = new GoogleAuthProvider();
+  } catch (error: unknown) {
+    console.warn('Firebase initialization warning:', error);
+  }
+}
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [snackbarMessage, setSnackbarMessage] = useState<string>('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'info' | 'warning' | 'error'>('info');
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'info' | 'warning' | 'error' | 'success'>('info');
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [showDemoOption, setShowDemoOption] = useState<boolean>(false);
 
   const handleGoogleLogin = async () => {
-    if (!isFirebaseConfigured || !auth || !googleProvider) {
-      setSnackbarSeverity('warning');
-      setSnackbarMessage(
-        'Firebase credentials are not configured yet. Add your Firebase keys to .env to enable live Google sign-in.'
-      );
-      setSnackbarOpen(true);
+    // If Firebase is configured with valid credentials, use live Firebase Google Sign-In
+    if (isFirebaseConfigured && auth && googleProvider) {
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const accessToken = await result.user.getIdToken();
+        navigate('/dashboard', {
+          state: {
+            token: accessToken,
+            user: {
+              displayName: result.user.displayName || 'Google Scholar',
+              email: result.user.email || '',
+              photoURL: result.user.photoURL || ''
+            }
+          }
+        });
+      } catch (err: unknown) {
+        const error = err as Error;
+        console.error('Google Sign-In Error:', error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(error.message || 'Google sign-in failed.');
+        setSnackbarOpen(true);
+      }
       return;
     }
 
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const accessToken = await result.user.getIdToken();
-      navigate('/dashboard', {
-        state: {
-          token: accessToken,
-          user: {
-            displayName: result.user.displayName,
-            email: result.user.email,
-            photoURL: result.user.photoURL
-          }
+    // If Firebase credentials are not in .env, display helpful prompt and show demo option
+    setShowDemoOption(true);
+    setSnackbarSeverity('warning');
+    setSnackbarMessage(
+      'Firebase credentials not found in .env. Click "Demo Google Sign In" below to test the accessToken dashboard flow.'
+    );
+    setSnackbarOpen(true);
+  };
+
+  const handleDemoGoogleLogin = () => {
+    const demoToken = `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc3R1ZHlmbG93LWFwcCIsInN1YiI6InN0dWR5LWZsb3ctdXNlci0xMDEiLCJhdWQiOiJzdHVkeWZsb3ctYXBwIiwiZW1haWwiOiJhbGV4LnN0dWRlbnRAdW5pdmVyc2l0eS5lZHUiLCJuYW1lIjoiQWxleCBKLiIsImlhdCI6MTcwODU2Nzg5MH0.demo_studyflow_access_token_signature_preview`;
+    navigate('/dashboard', {
+      state: {
+        token: demoToken,
+        user: {
+          displayName: 'Alex Johnson',
+          email: 'alex.student@university.edu',
+          photoURL: ''
         }
-      });
-    } catch (err: unknown) {
-      const error = err as Error;
-      console.error('Google Sign-In Error:', error);
-      setSnackbarSeverity('error');
-      setSnackbarMessage(error.message || 'Google sign-in failed');
-      setSnackbarOpen(true);
-    }
-  };
-
-  const handleAppleLogin = () => {
-    setSnackbarSeverity('info');
-    setSnackbarMessage('Apple Sign-In is coming soon!');
-    setSnackbarOpen(true);
-  };
-
-  const handleFacebookLogin = () => {
-    setSnackbarSeverity('info');
-    setSnackbarMessage('Facebook Sign-In is coming soon!');
-    setSnackbarOpen(true);
+      }
+    });
   };
 
   const handleFormLoginSuccess = ({ username }: { username: string }) => {
+    const studentName = username.includes('@') ? username.split('@')[0] : username;
+    const standardToken = `studyflow_auth_${Date.now()}_${btoa(username)}`;
     navigate('/dashboard', {
       state: {
+        token: standardToken,
         user: {
-          displayName: username.includes('@') ? username.split('@')[0] : username,
-          email: username.includes('@') ? username : `${username}@example.com`
+          displayName: studentName.charAt(0).toUpperCase() + studentName.slice(1),
+          email: username.includes('@') ? username : `${username}@university.edu`
         }
       }
     });
@@ -97,111 +137,154 @@ export const LoginPage: React.FC = () => {
           justifyContent: 'space-between',
           alignItems: 'center',
           px: { xs: 3, sm: 6, md: 8, lg: 12 },
-          py: { xs: 5, md: 6 }
+          py: { xs: 4, md: 6 }
         }}
       >
-        <Box sx={{ width: '100%', maxWidth: 420, my: 'auto' }}>
-          {/* Heading */}
+        {/* Brand Header */}
+        <Box sx={{ width: '100%', maxWidth: 420, display: 'flex', alignItems: 'center', gap: 1.2, mb: { xs: 3, md: 0 } }}>
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: 2.5,
+              bgcolor: '#eff6ff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#2563eb'
+            }}
+          >
+            <AutoStoriesRoundedIcon sx={{ fontSize: 24 }} />
+          </Box>
+          <Box>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 800,
+                color: '#0f172a',
+                fontSize: '1.25rem',
+                lineHeight: 1.1,
+                letterSpacing: '-0.02em',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.5
+              }}
+            >
+              📚 StudyFlow
+            </Typography>
+            <Typography variant="caption" sx={{ color: '#64748b', fontSize: '0.75rem', fontWeight: 500 }}>
+              Organize your learning. Achieve your goals.
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Main Form Container */}
+        <Box sx={{ width: '100%', maxWidth: 420, my: 'auto', py: 2 }}>
+          {/* Welcome Heading */}
           <Typography
-            variant="h3"
+            variant="h4"
             component="h1"
             sx={{
               fontWeight: 800,
-              fontSize: { xs: '2rem', sm: '2.5rem' },
-              color: '#0e1013',
-              textAlign: 'center',
+              fontSize: { xs: '1.85rem', sm: '2.25rem' },
+              color: '#0f172a',
               letterSpacing: '-0.02em',
-              mb: 1.5
+              mb: 1
             }}
           >
             Welcome back!
           </Typography>
 
           <Typography
-            variant="body2"
+            variant="body1"
             sx={{
-              color: '#6e7178',
-              textAlign: 'center',
-              mb: 4.5,
+              color: '#64748b',
+              mb: 4,
+              fontSize: '0.95rem',
               lineHeight: 1.5
             }}
           >
-            Simplify your workflow and boost your productivity with{' '}
-            <strong style={{ color: '#1b1d21' }}>Tuga's App</strong>. Get started for free.
+            Continue your learning journey.
           </Typography>
 
           {/* LoginForm Component */}
           <LoginForm onSuccess={handleFormLoginSuccess} />
 
-          {/* Other Element: Divider */}
+          {/* Divider */}
           <Divider
             sx={{
-              my: 4,
-              color: '#6f747e',
+              my: 3.5,
+              color: '#94a3b8',
               fontSize: '0.85rem',
-              '&::before, &::after': { borderColor: '#e3e6eb' }
+              '&::before, &::after': { borderColor: '#e2e8f0' }
             }}
           >
             or continue with
           </Divider>
 
-          {/* Other Element: Social Login Buttons */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2.2 }}>
-            <IconButton
-              onClick={handleGoogleLogin}
-              aria-label="Login with Google"
-              sx={{
-                width: 48,
-                height: 48,
-                bgcolor: '#0a0d14',
-                color: '#ffffff',
-                '&:hover': { bgcolor: '#222631' }
-              }}
-            >
-              <GoogleIcon fontSize="small" />
-            </IconButton>
+          {/* Continue with Google Button */}
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={handleGoogleLogin}
+            startIcon={<GoogleIcon sx={{ color: '#ea4335' }} />}
+            sx={{
+              borderRadius: '12px',
+              py: 1.3,
+              borderColor: '#e2e8f0',
+              color: '#1e293b',
+              textTransform: 'none',
+              fontSize: '0.95rem',
+              fontWeight: 600,
+              bgcolor: '#ffffff',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+              '&:hover': {
+                borderColor: '#cbd5e1',
+                bgcolor: '#f8fafc'
+              }
+            }}
+          >
+            Continue with Google
+          </Button>
 
-            <IconButton
-              onClick={handleAppleLogin}
-              aria-label="Login with Apple"
-              sx={{
-                width: 48,
-                height: 48,
-                bgcolor: '#0a0d14',
-                color: '#ffffff',
-                '&:hover': { bgcolor: '#222631' }
-              }}
-            >
-              <AppleIcon fontSize="small" />
-            </IconButton>
-
-            <IconButton
-              onClick={handleFacebookLogin}
-              aria-label="Login with Facebook"
-              sx={{
-                width: 48,
-                height: 48,
-                bgcolor: '#0a0d14',
-                color: '#ffffff',
-                '&:hover': { bgcolor: '#222631' }
-              }}
-            >
-              <FacebookRoundedIcon fontSize="small" />
-            </IconButton>
-          </Box>
+          {/* Demo Login Button when Firebase keys are not in .env */}
+          {showDemoOption && (
+            <Box sx={{ mt: 2.5, textAlign: 'center' }}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleDemoGoogleLogin}
+                sx={{
+                  borderRadius: '999px',
+                  borderColor: '#2563eb',
+                  color: '#2563eb',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  fontSize: '0.8rem',
+                  bgcolor: '#eff6ff',
+                  '&:hover': {
+                    borderColor: '#1d4ed8',
+                    bgcolor: '#dbeafe'
+                  }
+                }}
+              >
+                Demo Google Sign In (Test accessToken)
+              </Button>
+            </Box>
+          )}
         </Box>
 
-        {/* Other Element: Bottom Registration Link */}
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="body2" sx={{ color: '#4a4e58', fontWeight: 500 }}>
-            Not a member?{' '}
+        {/* Bottom Registration Link */}
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 500 }}>
+            Don't have an account?{' '}
             <Link
               href="#"
-              underline="none"
+              underline="hover"
               sx={{
-                color: '#558b6e',
-                fontWeight: 600,
-                '&:hover': { textDecoration: 'underline' }
+                color: '#2563eb',
+                fontWeight: 700,
+                '&:hover': { color: '#1d4ed8' }
               }}
             >
               Register now
@@ -210,10 +293,10 @@ export const LoginPage: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Right Column: Hero Card Showcase */}
+      {/* Right Column: Academic Showcase Card */}
       <Box
         sx={{
-          flex: 1.1,
+          flex: 1.15,
           display: { xs: 'none', md: 'flex' },
           flexDirection: 'column',
           justifyContent: 'center',
@@ -225,123 +308,96 @@ export const LoginPage: React.FC = () => {
           sx={{
             width: '100%',
             height: '100%',
-            maxHeight: 780,
-            borderRadius: 7,
-            bgcolor: '#f5faf6',
+            maxHeight: 740,
+            borderRadius: '28px',
+            bgcolor: '#f0f7ff',
+            border: '1.5px solid #e0e7ff',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'center',
             p: 5,
-            position: 'relative'
+            position: 'relative',
+            overflow: 'hidden'
           }}
         >
-          {/* Main Visual Content */}
+          {/* Top Academic Badge */}
+          <Box
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1,
+              px: 2,
+              py: 0.8,
+              borderRadius: '999px',
+              bgcolor: '#ffffff',
+              border: '1px solid #dbeafe',
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.08)'
+            }}
+          >
+            <SchoolRoundedIcon sx={{ fontSize: 16, color: '#2563eb' }} />
+            <Typography variant="caption" sx={{ fontWeight: 700, color: '#1e3a8a', letterSpacing: '0.02em' }}>
+              ACADEMIC SUCCESS SUITE
+            </Typography>
+          </Box>
+
+          {/* Main Visual Content: Books / Studying Illustration */}
           <Box
             sx={{
               position: 'relative',
               width: '100%',
-              maxWidth: 460,
+              maxWidth: 480,
               my: 'auto',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center'
             }}
           >
-            {/* Meditating Hero / Workflow Image */}
             <Box
               component="img"
-              src={meditationIllustration}
-              alt="Workflow illustration"
+              src={studyIllustration}
+              alt="Books and student studying illustration"
               sx={{
-                width: '90%',
+                width: '95%',
                 maxHeight: 380,
-                objectFit: 'contain'
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 12px 24px rgba(30, 58, 138, 0.06))'
               }}
             />
+          </Box>
 
-            {/* Floating Canva Design Badge */}
-            <Paper
-              elevation={0}
+          {/* Tagline & Small Text */}
+          <Box sx={{ textAlign: 'center', maxWidth: 460 }}>
+            <Typography
+              variant="h5"
               sx={{
-                position: 'absolute',
-                bottom: 10,
-                left: 10,
-                border: '1.5px solid #22252a',
-                borderRadius: 4,
-                p: 2,
-                width: 170,
-                bgcolor: '#ffffff',
-                boxShadow: '0 10px 25px -5px rgba(0,0,0,0.06)'
+                fontWeight: 800,
+                color: '#0f172a',
+                letterSpacing: '-0.02em',
+                fontSize: { md: '1.35rem', lg: '1.5rem' },
+                mb: 1
               }}
             >
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#16181d' }}>
-                Canva Design
-              </Typography>
-              <Typography variant="caption" sx={{ color: '#888d96', display: 'block', mb: 1.5 }}>
-                10 Task
-              </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Box
-                  sx={{
-                    border: '1.5px solid #22252a',
-                    borderRadius: '999px',
-                    px: 1.5,
-                    py: 0.2,
-                    fontSize: '0.75rem',
-                    fontWeight: 600
-                  }}
-                >
-                  Design
-                </Box>
-                <Box
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    border: '3px solid #6ebd85',
-                    borderTopColor: 'transparent',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.65rem',
-                    fontWeight: 700
-                  }}
-                >
-                  84%
-                </Box>
-              </Box>
-            </Paper>
+              Organize your learning. Achieve your goals.
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#64748b',
+                fontSize: '0.95rem',
+                lineHeight: 1.6
+              }}
+            >
+              Learn smarter, stay organized, and reach your goals with <strong>StudyFlow</strong>.
+            </Typography>
           </Box>
-
-          {/* Carousel Indicator Dots */}
-          <Box sx={{ display: 'flex', gap: 0.8, mb: 3 }}>
-            <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#d3dad5' }} />
-            <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#d3dad5' }} />
-            <Box sx={{ width: 22, height: 8, borderRadius: 4, bgcolor: '#121417' }} />
-          </Box>
-
-          {/* Promo Header Text */}
-          <Typography
-            variant="h5"
-            sx={{
-              fontWeight: 700,
-              color: '#1a1d22',
-              textAlign: 'center',
-              letterSpacing: '-0.01em',
-              mb: 1
-            }}
-          >
-            Make your work easier and organized <br />
-            with <strong style={{ color: '#090a0c' }}>Tuga's App</strong>
-          </Typography>
         </Box>
       </Box>
 
       {/* Snackbar notification */}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={7000}
         onClose={() => setSnackbarOpen(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
@@ -355,5 +411,5 @@ export const LoginPage: React.FC = () => {
         </Alert>
       </Snackbar>
     </Box>
-    );
-  };
+  );
+};
