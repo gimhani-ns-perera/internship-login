@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sky-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eff6ff" />
+      <stop offset="100%" stop-color="#e0e7ff" />
+    </linearGradient>
+    <linearGradient id="primary-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <linearGradient id="accent-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <linearGradient id="desk-wood" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+    <filter id="card-shadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#1e3a8a" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Ambient Backdrop Circles -->
+  <circle cx="260" cy="210" r="160" fill="url(#sky-bg)" opacity="0.8" />
+  <circle cx="120" cy="110" r="45" fill="#dbeafe" opacity="0.5" />
+  <circle cx="410" cy="130" r="55" fill="#ede9fe" opacity="0.6" />
+
+  <!-- Floating Academic Symbols (Sparkles & Stars) -->
+  <path d="M 390 70 L 393 80 L 403 83 L 393 86 L 390 96 L 387 86 L 377 83 L 387 80 Z" fill="#8b5cf6" />
+  <path d="M 130 220 L 133 227 L 140 230 L 133 233 L 130 240 L 127 233 L 120 230 L 127 227 Z" fill="#3b82f6" />
+  <circle cx="210" cy="65" r="4" fill="#6366f1" opacity="0.6" />
+  <circle cx="430" cy="220" r="4.5" fill="#3b82f6" opacity="0.7" />
+
+  <!-- Floating Study Goal Card (Top Left) -->
+  <g filter="url(#card-shadow)">
+    <rect x="50" y="70" width="130" height="66" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+    <circle cx="75" cy="95" r="12" fill="#eff6ff" />
+    <text x="70" y="100" font-size="13">📖</text>
+    <rect x="96" y="88" width="68" height="6.5" rx="3.2" fill="#1e293b" />
+    <rect x="96" y="100" width="45" height="5" rx="2.5" fill="#94a3b8" />
+    <!-- Mini Progress -->
+    <rect x="96" y="114" width="70" height="4.5" rx="2.25" fill="#f1f5f9" />
+    <rect x="96" y="114" width="55" height="4.5" rx="2.25" fill="#3b82f6" />
+  </g>
+
+  <!-- Floating "Tasks Due Today" Card (Top Right) -->
+  <g filter="url(#card-shadow)">
+    <rect x="345" y="110" width="135" height="70" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" />
+    <circle cx="372" cy="135" r="12" fill="#faf5ff" />
+    <text x="367" y="140" font-size="13">🎯</text>
+    <text x="392" y="134" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#0f172a">Daily Target</text>
+    <text x="392" y="147" font-family="system-ui, sans-serif" font-size="9.5" fill="#64748b">4 of 5 complete</text>
+    <rect x="362" y="160" width="102" height="4.5" rx="2.25" fill="#f3e8ff" />
+    <rect x="362" y="160" width="82" height="4.5" rx="2.25" fill="#8b5cf6" />
+  </g>
+
+  <!-- Study Desk Surface -->
+  <rect x="110" y="325" width="300" height="12" rx="6" fill="url(#desk-wood)" />
+  <!-- Desk Base Shadow -->
+  <ellipse cx="260" cy="345" rx="140" ry="10" fill="#0f172a" opacity="0.05" />
+
+  <!-- Stack of Books on Desk (Right side) -->
+  <!-- Book 1 (Bottom, Blue) -->
+  <rect x="325" y="305" width="68" height="18" rx="3" fill="#2563eb" />
+  <rect x="330" y="310" width="58" height="4" rx="2" fill="#93c5fd" opacity="0.8" />
+  <!-- Book 2 (Middle, Purple) -->
+  <rect x="330" y="289" width="60" height="16" rx="3" fill="#7c3aed" />
+  <rect x="334" y="294" width="50" height="3.5" rx="1.7" fill="#d8b4fe" opacity="0.8" />
+  <!-- Book 3 (Top, Amber/Gold bookmark) -->
+  <rect x="335" y="275" width="52" height="14" rx="3" fill="#f59e0b" />
+  <path d="M 372 275 L 372 292 L 376 288 L 380 292 L 380 275 Z" fill="#ef4444" />
+
+  <!-- Coffee / Tea Mug -->
+  <rect x="135" y="295" width="22" height="28" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+  <path d="M 135 304 C 127 304, 127 318, 135 318" fill="none" stroke="#cbd5e1" stroke-width="2.5" />
+  <!-- Heart on mug -->
+  <circle cx="146" cy="309" r="4" fill="#3b82f6" opacity="0.7" />
+  <!-- Steam from mug -->
+  <path d="M 143 288 Q 146 283 143 278" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.7" />
+  <path d="M 149 287 Q 152 282 149 277" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round" opacity="0.7" />
+
+  <!-- Student at Desk Studying -->
+  <!-- Torso / Hoodie (Modern Navy / Slate) -->
+  <path d="M 220 325 L 215 235 C 215 210, 295 210, 295 235 L 290 325 Z" fill="#1e293b" />
+  <!-- Hoodie Collar / V-neck -->
+  <path d="M 245 230 L 255 250 L 265 230 Z" fill="#334155" />
+
+  <!-- Neck -->
+  <rect x="247" y="195" width="16" height="18" rx="5" fill="#fed7aa" />
+
+  <!-- Head -->
+  <ellipse cx="255" cy="175" rx="23" ry="26" fill="#fed7aa" />
+
+  <!-- Hair (Stylish modern sweep) -->
+  <path d="M 233 172 C 230 148, 248 135, 265 135 C 282 135, 287 150, 285 166 C 278 160, 268 158, 258 162 C 248 160, 238 164, 233 172 Z" fill="#0f172a" />
+  <!-- Student Bun / Cap hint -->
+  <ellipse cx="260" cy="134" rx="14" ry="11" fill="#0f172a" />
+
+  <!-- Focused studying face expression -->
+  <!-- Closed/Focused Eyes looking down at laptop -->
+  <path d="M 244 175 Q 248 178 252 175" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
+  <path d="M 258 175 Q 262 178 266 175" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" />
+  <!-- Content smile -->
+  <path d="M 252 187 Q 255 190 258 187" fill="none" stroke="#475569" stroke-width="1.8" stroke-linecap="round" />
+
+  <!-- Headphones (Soft Purple) -->
+  <path d="M 232 175 C 232 142, 278 142, 278 175" fill="none" stroke="#7c3aed" stroke-width="4.5" stroke-linecap="round" />
+  <rect x="228" y="168" width="7" height="16" rx="3.5" fill="#7c3aed" />
+  <rect x="275" y="168" width="7" height="16" rx="3.5" fill="#7c3aed" />
+
+  <!-- Laptop on Desk -->
+  <!-- Laptop Screen -->
+  <path d="M 218 265 L 292 265 L 286 312 L 224 312 Z" fill="#3b82f6" />
+  <!-- Code/Text Lines on Screen -->
+  <rect x="230" y="274" width="35" height="3" rx="1.5" fill="#ffffff" opacity="0.9" />
+  <rect x="230" y="281" width="48" height="3" rx="1.5" fill="#93c5fd" opacity="0.8" />
+  <rect x="230" y="288" width="28" height="3" rx="1.5" fill="#ffffff" opacity="0.7" />
+  <circle cx="274" cy="298" r="6" fill="#60a5fa" />
+  <!-- Laptop Base -->
+  <polygon points="208,312 302,312 312,325 198,325" fill="#64748b" />
+  <line x1="242" y1="318" x2="268" y2="318" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Hands Typing / Resting on Desk -->
+  <path d="M 212 250 C 200 280, 215 315, 235 320" fill="none" stroke="#1e293b" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="235" cy="320" r="7" fill="#fed7aa" />
+  <path d="M 298 250 C 310 280, 295 315, 275 320" fill="none" stroke="#1e293b" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="275" cy="320" r="7" fill="#fed7aa" />
+</svg>

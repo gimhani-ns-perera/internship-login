@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import KeyIcon from '@mui/icons-material/Key';
+import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -25,8 +26,8 @@ export const DashboardPage: React.FC = () => {
 
   const [copied, setCopied] = useState(false);
 
-  const displayName = user?.displayName || user?.email || 'Authenticated User';
-  const userEmail = user?.email || 'user@example.com';
+  const displayName = user?.displayName || user?.email || 'StudyFlow Scholar';
+  const userEmail = user?.email || 'student@university.edu';
 
   const handleCopyToken = () => {
     if (token) {
@@ -46,7 +47,7 @@ export const DashboardPage: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        bgcolor: '#f5faf6',
+        bgcolor: '#f0f7ff',
         p: { xs: 2, sm: 4 }
       }}
     >
@@ -57,37 +58,57 @@ export const DashboardPage: React.FC = () => {
           width: '100%',
           p: { xs: 3, sm: 4.5 },
           borderRadius: 6,
-          border: '1.5px solid #e0e6e2',
+          border: '1.5px solid #dbeafe',
           textAlign: 'center',
-          boxShadow: '0 20px 40px -15px rgba(20, 45, 30, 0.08)'
+          boxShadow: '0 20px 40px -15px rgba(30, 58, 138, 0.08)'
         }}
       >
         <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 0 }}>
-          {/* Status Badge */}
+          {/* Logo Badge */}
           <Box
             sx={{
-              width: 72,
-              height: 72,
-              borderRadius: '50%',
-              bgcolor: '#e8f6ed',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              gap: 1,
+              px: 2,
+              py: 0.6,
+              borderRadius: '999px',
+              bgcolor: '#eff6ff',
+              border: '1px solid #bfdbfe',
               mb: 2.5
             }}
           >
-            <CheckCircleOutlineRoundedIcon sx={{ fontSize: 44, color: '#55a574' }} />
+            <AutoStoriesRoundedIcon sx={{ fontSize: 18, color: '#2563eb' }} />
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#1e3a8a' }}>
+              📚 StudyFlow Portal
+            </Typography>
           </Box>
 
-          <Typography variant="h4" sx={{ fontWeight: 800, color: '#16181d', mb: 1 }}>
+          {/* Success Status Badge */}
+          <Box
+            sx={{
+              width: 68,
+              height: 68,
+              borderRadius: '50%',
+              bgcolor: '#dcfce7',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mb: 2
+            }}
+          >
+            <CheckCircleOutlineRoundedIcon sx={{ fontSize: 40, color: '#16a34a' }} />
+          </Box>
+
+          <Typography variant="h4" sx={{ fontWeight: 800, color: '#0f172a', mb: 1, letterSpacing: '-0.02em' }}>
             Authentication Successful
           </Typography>
 
-          <Typography variant="body2" sx={{ color: '#6e7178', mb: 3 }}>
-            You have authenticated into <strong style={{ color: '#16181d' }}>Tuga's App</strong>.
+          <Typography variant="body2" sx={{ color: '#64748b', mb: 3 }}>
+            Welcome back to your <strong style={{ color: '#2563eb' }}>StudyFlow</strong> learning dashboard.
           </Typography>
 
-          {/* User Profile Card */}
+          {/* Student Profile Card */}
           <Box
             sx={{
               display: 'flex',
@@ -95,24 +116,24 @@ export const DashboardPage: React.FC = () => {
               gap: 2,
               p: 2,
               width: '100%',
-              bgcolor: '#f9fbf9',
+              bgcolor: '#f8fafc',
               borderRadius: 4,
-              border: '1px solid #eef2ef',
+              border: '1px solid #e2e8f0',
               mb: 3,
               textAlign: 'left'
             }}
           >
             <Avatar
               src={user?.photoURL}
-              sx={{ bgcolor: '#16181d', width: 48, height: 48, fontWeight: 700 }}
+              sx={{ bgcolor: '#2563eb', width: 48, height: 48, fontWeight: 700 }}
             >
               {displayName.charAt(0).toUpperCase()}
             </Avatar>
             <Box sx={{ overflow: 'hidden' }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#16181d' }} noWrap>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#0f172a' }} noWrap>
                 {displayName}
               </Typography>
-              <Typography variant="caption" sx={{ color: '#888d96' }} noWrap>
+              <Typography variant="caption" sx={{ color: '#64748b' }} noWrap>
                 {userEmail}
               </Typography>
             </Box>
@@ -122,13 +143,13 @@ export const DashboardPage: React.FC = () => {
           <Box sx={{ width: '100%', textAlign: 'left', mb: 3.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <KeyIcon sx={{ fontSize: 18, color: '#55a574' }} />
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1c2024' }}>
+                <KeyIcon sx={{ fontSize: 18, color: '#2563eb' }} />
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#0f172a' }}>
                   User Access Token (accessToken)
                 </Typography>
               </Box>
               <Tooltip title="Copy Token">
-                <IconButton size="small" onClick={handleCopyToken} sx={{ color: '#4d515a' }}>
+                <IconButton size="small" onClick={handleCopyToken} sx={{ color: '#64748b' }}>
                   <ContentCopyIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
@@ -138,9 +159,9 @@ export const DashboardPage: React.FC = () => {
               elevation={0}
               sx={{
                 p: 2,
-                bgcolor: '#0f1318',
+                bgcolor: '#0f172a',
                 borderRadius: 3,
-                border: '1px solid #29303d',
+                border: '1px solid #334155',
                 overflowX: 'auto',
                 maxHeight: 160
               }}
@@ -150,7 +171,7 @@ export const DashboardPage: React.FC = () => {
                 sx={{
                   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
                   fontSize: '0.78rem',
-                  color: '#98dfb0',
+                  color: '#93c5fd',
                   margin: 0,
                   whiteSpace: 'pre-wrap',
                   wordBreak: 'break-all',
@@ -168,17 +189,17 @@ export const DashboardPage: React.FC = () => {
             variant="contained"
             onClick={handleLogout}
             sx={{
-              borderRadius: '999px',
+              borderRadius: '12px',
               py: 1.4,
-              bgcolor: '#0a0d14',
+              bgcolor: '#2563eb',
               color: '#ffffff',
               textTransform: 'none',
               fontSize: '1rem',
-              fontWeight: 600,
-              boxShadow: 'none',
+              fontWeight: 700,
+              boxShadow: '0 4px 14px rgba(37, 99, 235, 0.3)',
               '&:hover': {
-                bgcolor: '#222631',
-                boxShadow: 'none'
+                bgcolor: '#1d4ed8',
+                boxShadow: '0 6px 20px rgba(37, 99, 235, 0.4)'
               }
             }}
           >
