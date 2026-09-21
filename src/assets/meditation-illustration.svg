@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad-body" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#191c21" />
+      <stop offset="100%" stop-color="#2c323b" />
+    </linearGradient>
+    <linearGradient id="grad-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#84d9a5" />
+      <stop offset="100%" stop-color="#55a574" />
+    </linearGradient>
+    <linearGradient id="grad-card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f0f6f2" />
+    </linearGradient>
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#14211a" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Ambient Decorative Background Elements -->
+  <circle cx="250" cy="200" r="140" fill="#e8f4ec" opacity="0.6" />
+  <circle cx="130" cy="110" r="40" fill="#daf0e2" opacity="0.5" />
+  <circle cx="370" cy="120" r="50" fill="#edf7f1" opacity="0.7" />
+
+  <!-- Floating Sparkles & Dots -->
+  <circle cx="110" cy="180" r="4" fill="#6ebd85" />
+  <circle cx="390" cy="220" r="5" fill="#6ebd85" />
+  <circle cx="200" cy="70" r="3" fill="#2c323b" opacity="0.4" />
+  <circle cx="310" cy="65" r="4" fill="#6ebd85" opacity="0.8" />
+  <path d="M 360 85 L 364 95 L 374 99 L 364 103 L 360 113 L 356 103 L 346 99 L 356 95 Z" fill="#6ebd85" />
+  <path d="M 140 240 L 143 247 L 150 250 L 143 253 L 140 260 L 137 253 L 130 250 L 137 247 Z" fill="#84d9a5" />
+
+  <!-- Floating Productivity Card (Top Left) -->
+  <g filter="url(#soft-shadow)">
+    <rect x="70" y="80" width="105" height="58" rx="14" fill="#ffffff" stroke="#e0e8e3" stroke-width="1.5" />
+    <circle cx="95" cy="102" r="11" fill="#e8f6ed" />
+    <path d="M 90 102 L 94 106 L 101 98" fill="none" stroke="#55a574" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="114" y="96" width="45" height="6" rx="3" fill="#22262e" />
+    <rect x="114" y="108" width="30" height="5" rx="2.5" fill="#a4abb5" />
+  </g>
+
+  <!-- Floating Productivity Card (Top Right) -->
+  <g filter="url(#soft-shadow)">
+    <rect x="330" y="140" width="105" height="64" rx="14" fill="#ffffff" stroke="#e0e8e3" stroke-width="1.5" />
+    <rect x="348" y="156" width="55" height="6" rx="3" fill="#22262e" />
+    <rect x="348" y="168" width="40" height="5" rx="2.5" fill="#a4abb5" />
+    <!-- Mini progress bar -->
+    <rect x="348" y="184" width="70" height="5" rx="2.5" fill="#e8eee9" />
+    <rect x="348" y="184" width="50" height="5" rx="2.5" fill="#6ebd85" />
+  </g>
+
+  <!-- Character / Meditating Hero -->
+  <!-- Shadow under character -->
+  <ellipse cx="250" cy="315" rx="100" ry="14" fill="#1b2e23" opacity="0.08" />
+
+  <!-- Legs in crossed / lotus position -->
+  <path d="M 170 295 C 175 270, 205 275, 235 285 C 245 288, 255 288, 265 285 C 295 275, 325 270, 330 295 C 333 308, 305 315, 250 315 C 195 315, 167 308, 170 295 Z" fill="#1b1e24" />
+  <path d="M 195 305 C 220 312, 280 312, 305 305" fill="none" stroke="#2c323b" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Torso / Hoodie -->
+  <path d="M 215 285 L 210 215 C 210 195, 290 195, 290 215 L 285 285 Z" fill="url(#grad-body)" />
+
+  <!-- Arms / Relaxed mudra pose -->
+  <!-- Left arm -->
+  <path d="M 214 205 C 185 220, 165 255, 185 275 C 195 285, 205 280, 208 270" fill="none" stroke="#1b1e24" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Left hand -->
+  <circle cx="205" cy="270" r="9" fill="#f8c9b2" />
+
+  <!-- Right arm -->
+  <path d="M 286 205 C 315 220, 335 255, 315 275 C 305 285, 295 280, 292 270" fill="none" stroke="#1b1e24" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Right hand -->
+  <circle cx="295" cy="270" r="9" fill="#f8c9b2" />
+
+  <!-- Neck -->
+  <rect x="242" y="165" width="16" height="20" rx="6" fill="#f8c9b2" />
+
+  <!-- Head -->
+  <ellipse cx="250" cy="150" rx="24" ry="28" fill="#f8c9b2" />
+
+  <!-- Hair -->
+  <path d="M 226 148 C 224 125, 240 115, 255 115 C 272 115, 276 128, 276 142 C 270 138, 260 138, 252 142 C 244 140, 235 142, 226 148 Z" fill="#121417" />
+  <!-- Hair Bun / Stylish topknot -->
+  <ellipse cx="256" cy="112" rx="14" ry="12" fill="#121417" />
+
+  <!-- Calm / Serene Face details (closed eyes in peaceful meditation) -->
+  <path d="M 239 150 Q 243 153 247 150" fill="none" stroke="#5c4538" stroke-width="2" stroke-linecap="round" />
+  <path d="M 253 150 Q 257 153 261 150" fill="none" stroke="#5c4538" stroke-width="2" stroke-linecap="round" />
+  <!-- Gentle Smile -->
+  <path d="M 247 160 Q 250 163 253 160" fill="none" stroke="#5c4538" stroke-width="1.8" stroke-linecap="round" />
+
+  <!-- Glowing Energy Ring / Aura around head -->
+  <circle cx="250" cy="150" r="46" fill="none" stroke="#6ebd85" stroke-width="2" stroke-dasharray="4 6" opacity="0.6" />
+</svg>
