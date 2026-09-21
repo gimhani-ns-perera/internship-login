@@ -4,15 +4,11 @@ import {
   Box,
   Button,
   Divider,
-  IconButton,
   Link,
-  Paper,
   Snackbar,
   Typography
 } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
-import AppleIcon from '@mui/icons-material/Apple';
-import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
 import { initializeApp } from 'firebase/app';
@@ -109,18 +105,6 @@ export const LoginPage: React.FC = () => {
     });
   };
 
-  const handleAppleLogin = () => {
-    setSnackbarSeverity('info');
-    setSnackbarMessage('Apple Student Sign-In is coming soon!');
-    setSnackbarOpen(true);
-  };
-
-  const handleFacebookLogin = () => {
-    setSnackbarSeverity('info');
-    setSnackbarMessage('Facebook Sign-In is coming soon!');
-    setSnackbarOpen(true);
-  };
-
   const handleFormLoginSuccess = ({ username }: { username: string }) => {
     const studentName = username.includes('@') ? username.split('@')[0] : username;
     const standardToken = `studyflow_auth_${Date.now()}_${btoa(username)}`;
@@ -160,8 +144,8 @@ export const LoginPage: React.FC = () => {
         <Box sx={{ width: '100%', maxWidth: 420, display: 'flex', alignItems: 'center', gap: 1.2, mb: { xs: 3, md: 0 } }}>
           <Box
             sx={{
-              width: 38,
-              height: 38,
+              width: 40,
+              height: 40,
               borderRadius: 2.5,
               bgcolor: '#eff6ff',
               display: 'flex',
@@ -170,7 +154,7 @@ export const LoginPage: React.FC = () => {
               color: '#2563eb'
             }}
           >
-            <AutoStoriesRoundedIcon sx={{ fontSize: 22 }} />
+            <AutoStoriesRoundedIcon sx={{ fontSize: 24 }} />
           </Box>
           <Box>
             <Typography
@@ -189,14 +173,14 @@ export const LoginPage: React.FC = () => {
               📚 StudyFlow
             </Typography>
             <Typography variant="caption" sx={{ color: '#64748b', fontSize: '0.75rem', fontWeight: 500 }}>
-              Student Learning Platform
+              Organize your learning. Achieve your goals.
             </Typography>
           </Box>
         </Box>
 
         {/* Main Form Container */}
         <Box sx={{ width: '100%', maxWidth: 420, my: 'auto', py: 2 }}>
-          {/* Heading */}
+          {/* Welcome Heading */}
           <Typography
             variant="h4"
             component="h1"
@@ -220,8 +204,7 @@ export const LoginPage: React.FC = () => {
               lineHeight: 1.5
             }}
           >
-            Continue your learning journey with{' '}
-            <strong style={{ color: '#2563eb' }}>StudyFlow</strong>.
+            Continue your learning journey.
           </Typography>
 
           {/* LoginForm Component */}
@@ -239,7 +222,7 @@ export const LoginPage: React.FC = () => {
             or continue with
           </Divider>
 
-          {/* Prominent Google Sign In Button */}
+          {/* Continue with Google Button */}
           <Button
             fullWidth
             variant="outlined"
@@ -254,7 +237,6 @@ export const LoginPage: React.FC = () => {
               fontSize: '0.95rem',
               fontWeight: 600,
               bgcolor: '#ffffff',
-              mb: 2,
               boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
               '&:hover': {
                 borderColor: '#cbd5e1',
@@ -265,44 +247,9 @@ export const LoginPage: React.FC = () => {
             Continue with Google
           </Button>
 
-          {/* Social Icons for Apple & Facebook */}
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-            <IconButton
-              onClick={handleAppleLogin}
-              aria-label="Login with Apple"
-              sx={{
-                width: 44,
-                height: 44,
-                borderRadius: '10px',
-                border: '1.5px solid #e2e8f0',
-                bgcolor: '#ffffff',
-                color: '#0f172a',
-                '&:hover': { bgcolor: '#f1f5f9', borderColor: '#cbd5e1' }
-              }}
-            >
-              <AppleIcon fontSize="small" />
-            </IconButton>
-
-            <IconButton
-              onClick={handleFacebookLogin}
-              aria-label="Login with Facebook"
-              sx={{
-                width: 44,
-                height: 44,
-                borderRadius: '10px',
-                border: '1.5px solid #e2e8f0',
-                bgcolor: '#ffffff',
-                color: '#1877f2',
-                '&:hover': { bgcolor: '#f1f5f9', borderColor: '#cbd5e1' }
-              }}
-            >
-              <FacebookRoundedIcon fontSize="small" />
-            </IconButton>
-          </Box>
-
           {/* Demo Login Button when Firebase keys are not in .env */}
           {showDemoOption && (
-            <Box sx={{ mt: 3, textAlign: 'center' }}>
+            <Box sx={{ mt: 2.5, textAlign: 'center' }}>
               <Button
                 variant="outlined"
                 size="small"
@@ -361,7 +308,7 @@ export const LoginPage: React.FC = () => {
           sx={{
             width: '100%',
             height: '100%',
-            maxHeight: 780,
+            maxHeight: 740,
             borderRadius: '28px',
             bgcolor: '#f0f7ff',
             border: '1.5px solid #e0e7ff',
@@ -374,7 +321,7 @@ export const LoginPage: React.FC = () => {
             overflow: 'hidden'
           }}
         >
-          {/* Subtle Top Badge */}
+          {/* Top Academic Badge */}
           <Box
             sx={{
               display: 'inline-flex',
@@ -394,7 +341,7 @@ export const LoginPage: React.FC = () => {
             </Typography>
           </Box>
 
-          {/* Main Visual Content */}
+          {/* Main Visual Content: Books / Studying Illustration */}
           <Box
             sx={{
               position: 'relative',
@@ -406,11 +353,10 @@ export const LoginPage: React.FC = () => {
               alignItems: 'center'
             }}
           >
-            {/* Study / Student Hero Illustration */}
             <Box
               component="img"
               src={studyIllustration}
-              alt="StudyFlow student studying with books and laptop"
+              alt="Books and student studying illustration"
               sx={{
                 width: '95%',
                 maxHeight: 380,
@@ -418,73 +364,10 @@ export const LoginPage: React.FC = () => {
                 filter: 'drop-shadow(0 12px 24px rgba(30, 58, 138, 0.06))'
               }}
             />
-
-            {/* Floating Academic Progress Badge */}
-            <Paper
-              elevation={0}
-              sx={{
-                position: 'absolute',
-                bottom: 8,
-                left: 10,
-                border: '1.5px solid #cbd5e1',
-                borderRadius: '16px',
-                p: 2,
-                width: 180,
-                bgcolor: '#ffffff',
-                boxShadow: '0 12px 30px -8px rgba(15, 23, 42, 0.12)'
-              }}
-            >
-              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#0f172a', fontSize: '0.9rem' }}>
-                Study Schedule
-              </Typography>
-              <Typography variant="caption" sx={{ color: '#64748b', display: 'block', mb: 1.5, fontSize: '0.75rem' }}>
-                10 Tasks Completed
-              </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Box
-                  sx={{
-                    borderRadius: '999px',
-                    px: 1.5,
-                    py: 0.3,
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    bgcolor: '#eff6ff',
-                    color: '#2563eb',
-                    border: '1px solid #bfdbfe'
-                  }}
-                >
-                  Academic
-                </Box>
-                <Box
-                  sx={{
-                    width: 34,
-                    height: 34,
-                    borderRadius: '50%',
-                    border: '3px solid #2563eb',
-                    borderTopColor: '#e0e7ff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.7rem',
-                    fontWeight: 800,
-                    color: '#1d4ed8'
-                  }}
-                >
-                  84%
-                </Box>
-              </Box>
-            </Paper>
           </Box>
 
-          {/* Carousel Indicator Dots */}
-          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-            <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#cbd5e1' }} />
-            <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#cbd5e1' }} />
-            <Box sx={{ width: 24, height: 8, borderRadius: 4, bgcolor: '#2563eb' }} />
-          </Box>
-
-          {/* Tagline & Promo Header Text */}
-          <Box sx={{ textAlign: 'center' }}>
+          {/* Tagline & Small Text */}
+          <Box sx={{ textAlign: 'center', maxWidth: 460 }}>
             <Typography
               variant="h5"
               sx={{
@@ -495,11 +378,17 @@ export const LoginPage: React.FC = () => {
                 mb: 1
               }}
             >
-              Organize your learning. <br />
-              Achieve your goals with <strong style={{ color: '#2563eb' }}>StudyFlow</strong>
+              Organize your learning. Achieve your goals.
             </Typography>
-            <Typography variant="body2" sx={{ color: '#64748b', fontSize: '0.9rem' }}>
-              Learn smarter, stay organized, and reach your goals.
+            <Typography
+              variant="body2"
+              sx={{
+                color: '#64748b',
+                fontSize: '0.95rem',
+                lineHeight: 1.6
+              }}
+            >
+              Learn smarter, stay organized, and reach your goals with <strong>StudyFlow</strong>.
             </Typography>
           </Box>
         </Box>
