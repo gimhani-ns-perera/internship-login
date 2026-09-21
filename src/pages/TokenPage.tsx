@@ -44,23 +44,57 @@ export function TokenPage() {
     <Box
       sx={{
         minHeight: '100vh',
+        position: 'relative',
+        overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        bgcolor: '#f0f7ff',
+        background: 'linear-gradient(135deg, #f3e8ff 0%, #e0f2fe 50%, #fdf4ff 100%)',
         p: { xs: 2, sm: 4 }
       }}
     >
+      {/* Ambient Blurred Background Shapes */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '-8%',
+          left: '-5%',
+          width: { xs: 250, md: 400 },
+          height: { xs: 250, md: 400 },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, rgba(168, 85, 247, 0) 70%)',
+          filter: 'blur(60px)',
+          pointerEvents: 'none'
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: '-10%',
+          right: '-5%',
+          width: { xs: 280, md: 450 },
+          height: { xs: 280, md: 450 },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0) 70%)',
+          filter: 'blur(65px)',
+          pointerEvents: 'none'
+        }}
+      />
+
       <Card
         elevation={0}
         sx={{
+          position: 'relative',
+          zIndex: 1,
           maxWidth: 680,
           width: '100%',
           p: { xs: 3, sm: 4.5 },
-          borderRadius: 6,
-          border: '1.5px solid #dbeafe',
+          borderRadius: { xs: '20px', sm: '28px' },
+          bgcolor: 'rgba(255, 255, 255, 0.94)',
+          backdropFilter: 'blur(20px)',
+          border: '1.5px solid rgba(255, 255, 255, 0.85)',
           textAlign: 'center',
-          boxShadow: '0 20px 40px -15px rgba(30, 58, 138, 0.08)'
+          boxShadow: '0 25px 60px -15px rgba(30, 58, 138, 0.12), 0 10px 25px -5px rgba(124, 58, 237, 0.06)'
         }}
       >
         <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 0 }}>

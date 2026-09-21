@@ -123,200 +123,266 @@ export const LoginPage: React.FC = () => {
     <Box
       sx={{
         minHeight: '100vh',
+        position: 'relative',
+        overflow: 'hidden',
         display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' },
-        bgcolor: '#ffffff'
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #f3e8ff 0%, #e0f2fe 50%, #fdf4ff 100%)',
+        p: { xs: 2, sm: 3, md: 4 }
       }}
     >
-      {/* Left Column: Login Section */}
+      {/* Ambient Blurred Background Shapes (Option 2 — Color + Subtle Shapes) */}
       <Box
         sx={{
-          flex: 1,
+          position: 'absolute',
+          top: '-10%',
+          left: '-5%',
+          width: { xs: 280, md: 450 },
+          height: { xs: 280, md: 450 },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.28) 0%, rgba(168, 85, 247, 0) 70%)',
+          filter: 'blur(60px)',
+          pointerEvents: 'none'
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: '-12%',
+          right: '-8%',
+          width: { xs: 300, md: 500 },
+          height: { xs: 300, md: 500 },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.28) 0%, rgba(59, 130, 246, 0) 70%)',
+          filter: 'blur(70px)',
+          pointerEvents: 'none'
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '25%',
+          right: '18%',
+          width: { xs: 200, md: 340 },
+          height: { xs: 200, md: 340 },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(192, 132, 252, 0.22) 0%, rgba(192, 132, 252, 0) 70%)',
+          filter: 'blur(50px)',
+          pointerEvents: 'none'
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: '15%',
+          left: '12%',
+          width: { xs: 180, md: 300 },
+          height: { xs: 180, md: 300 },
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(96, 165, 250, 0.22) 0%, rgba(96, 165, 250, 0) 70%)',
+          filter: 'blur(50px)',
+          pointerEvents: 'none'
+        }}
+      />
+
+      {/* Main Elevated Glassmorphic Card Container */}
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          width: '100%',
+          maxWidth: 1100,
+          borderRadius: { xs: '20px', sm: '28px', md: '36px' },
+          bgcolor: 'rgba(255, 255, 255, 0.92)',
+          backdropFilter: 'blur(20px)',
+          border: '1.5px solid rgba(255, 255, 255, 0.85)',
+          boxShadow: '0 25px 60px -15px rgba(30, 58, 138, 0.12), 0 10px 25px -5px rgba(124, 58, 237, 0.06)',
           display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          px: { xs: 3, sm: 6, md: 8, lg: 12 },
-          py: { xs: 4, md: 6 }
+          flexDirection: { xs: 'column', md: 'row' },
+          overflow: 'hidden'
         }}
       >
-        {/* Brand Header */}
-        <Box sx={{ width: '100%', maxWidth: 420, display: 'flex', alignItems: 'center', gap: 1.2, mb: { xs: 3, md: 0 } }}>
-          <Box
-            sx={{
-              width: 40,
-              height: 40,
-              borderRadius: 2.5,
-              bgcolor: '#eff6ff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#2563eb'
-            }}
-          >
-            <AutoStoriesRoundedIcon sx={{ fontSize: 24 }} />
-          </Box>
-          <Box>
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 800,
-                color: '#0f172a',
-                fontSize: '1.25rem',
-                lineHeight: 1.1,
-                letterSpacing: '-0.02em',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 0.5
-              }}
-            >
-              📚 StudyFlow
-            </Typography>
-            <Typography variant="caption" sx={{ color: '#64748b', fontSize: '0.75rem', fontWeight: 500 }}>
-              Organize your learning. Achieve your goals.
-            </Typography>
-          </Box>
-        </Box>
-
-        {/* Main Form Container */}
-        <Box sx={{ width: '100%', maxWidth: 420, my: 'auto', py: 2 }}>
-          {/* Welcome Heading */}
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              fontWeight: 800,
-              fontSize: { xs: '1.85rem', sm: '2.25rem' },
-              color: '#0f172a',
-              letterSpacing: '-0.02em',
-              mb: 1
-            }}
-          >
-            Welcome back!
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              color: '#64748b',
-              mb: 4,
-              fontSize: '0.95rem',
-              lineHeight: 1.5
-            }}
-          >
-            Continue your learning journey.
-          </Typography>
-
-          {/* LoginForm Component */}
-          <LoginForm onSuccess={handleFormLoginSuccess} />
-
-          {/* Divider */}
-          <Divider
-            sx={{
-              my: 3.5,
-              color: '#94a3b8',
-              fontSize: '0.85rem',
-              '&::before, &::after': { borderColor: '#e2e8f0' }
-            }}
-          >
-            or continue with
-          </Divider>
-
-          {/* Continue with Google Button */}
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={handleGoogleLogin}
-            startIcon={<GoogleIcon sx={{ color: '#ea4335' }} />}
-            sx={{
-              borderRadius: '12px',
-              py: 1.3,
-              borderColor: '#e2e8f0',
-              color: '#1e293b',
-              textTransform: 'none',
-              fontSize: '0.95rem',
-              fontWeight: 600,
-              bgcolor: '#ffffff',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-              '&:hover': {
-                borderColor: '#cbd5e1',
-                bgcolor: '#f8fafc'
-              }
-            }}
-          >
-            Continue with Google
-          </Button>
-
-          {/* Demo Login Button when Firebase keys are not in .env */}
-          {showDemoOption && (
-            <Box sx={{ mt: 2.5, textAlign: 'center' }}>
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={handleDemoGoogleLogin}
-                sx={{
-                  borderRadius: '999px',
-                  borderColor: '#2563eb',
-                  color: '#2563eb',
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  fontSize: '0.8rem',
-                  bgcolor: '#eff6ff',
-                  '&:hover': {
-                    borderColor: '#1d4ed8',
-                    bgcolor: '#dbeafe'
-                  }
-                }}
-              >
-                Demo Google Sign In (Test accessToken)
-              </Button>
-            </Box>
-          )}
-        </Box>
-
-        {/* Bottom Registration Link */}
-        <Box sx={{ mt: 3 }}>
-          <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 500 }}>
-            Don't have an account?{' '}
-            <Link
-              href="#"
-              underline="hover"
-              sx={{
-                color: '#2563eb',
-                fontWeight: 700,
-                '&:hover': { color: '#1d4ed8' }
-              }}
-            >
-              Register now
-            </Link>
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* Right Column: Academic Showcase Card */}
-      <Box
-        sx={{
-          flex: 1.15,
-          display: { xs: 'none', md: 'flex' },
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          p: { md: 4, lg: 6 }
-        }}
-      >
+        {/* Left Column: Login Section */}
         <Box
           sx={{
-            width: '100%',
-            height: '100%',
-            maxHeight: 740,
-            borderRadius: '28px',
-            bgcolor: '#f0f7ff',
-            border: '1.5px solid #e0e7ff',
+            flex: 1,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'center',
-            p: 5,
+            px: { xs: 3, sm: 6, md: 7, lg: 8 },
+            py: { xs: 4, sm: 5, md: 5 }
+          }}
+        >
+          {/* Brand Header */}
+          <Box sx={{ width: '100%', maxWidth: 400, display: 'flex', alignItems: 'center', gap: 1.2, mb: { xs: 3, md: 0 } }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: 2.5,
+                bgcolor: '#eff6ff',
+                border: '1px solid #dbeafe',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#2563eb'
+              }}
+            >
+              <AutoStoriesRoundedIcon sx={{ fontSize: 22 }} />
+            </Box>
+            <Box>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 800,
+                  color: '#0f172a',
+                  fontSize: '1.25rem',
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.02em',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.5
+                }}
+              >
+                📚 StudyFlow
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#64748b', fontSize: '0.75rem', fontWeight: 500 }}>
+                Organize your learning. Achieve your goals.
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Main Form Container */}
+          <Box sx={{ width: '100%', maxWidth: 400, my: 'auto', py: { xs: 1, md: 2 } }}>
+            {/* Welcome Heading */}
+            <Typography
+              variant="h4"
+              component="h1"
+              sx={{
+                fontWeight: 800,
+                fontSize: { xs: '1.75rem', sm: '2.15rem' },
+                color: '#0f172a',
+                letterSpacing: '-0.02em',
+                mb: 1
+              }}
+            >
+              Welcome back!
+            </Typography>
+
+            <Typography
+              variant="body1"
+              sx={{
+                color: '#64748b',
+                mb: 3.5,
+                fontSize: '0.925rem',
+                lineHeight: 1.5
+              }}
+            >
+              Continue your learning journey.
+            </Typography>
+
+            {/* LoginForm Component */}
+            <LoginForm onSuccess={handleFormLoginSuccess} />
+
+            {/* Divider */}
+            <Divider
+              sx={{
+                my: 3,
+                color: '#94a3b8',
+                fontSize: '0.85rem',
+                '&::before, &::after': { borderColor: '#e2e8f0' }
+              }}
+            >
+              or continue with
+            </Divider>
+
+            {/* Continue with Google Button */}
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={handleGoogleLogin}
+              startIcon={<GoogleIcon sx={{ color: '#ea4335' }} />}
+              sx={{
+                borderRadius: '12px',
+                py: 1.3,
+                borderColor: '#e2e8f0',
+                color: '#1e293b',
+                textTransform: 'none',
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                bgcolor: '#ffffff',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                '&:hover': {
+                  borderColor: '#cbd5e1',
+                  bgcolor: '#f8fafc'
+                }
+              }}
+            >
+              Continue with Google
+            </Button>
+
+            {/* Demo Login Button when Firebase keys are not in .env */}
+            {showDemoOption && (
+              <Box sx={{ mt: 2, textAlign: 'center' }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={handleDemoGoogleLogin}
+                  sx={{
+                    borderRadius: '999px',
+                    borderColor: '#2563eb',
+                    color: '#2563eb',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    fontSize: '0.8rem',
+                    bgcolor: '#eff6ff',
+                    '&:hover': {
+                      borderColor: '#1d4ed8',
+                      bgcolor: '#dbeafe'
+                    }
+                  }}
+                >
+                  Demo Google Sign In (Test accessToken)
+                </Button>
+              </Box>
+            )}
+          </Box>
+
+          {/* Bottom Registration Link */}
+          <Box sx={{ mt: { xs: 2, md: 3 } }}>
+            <Typography variant="body2" sx={{ color: '#64748b', fontWeight: 500 }}>
+              Don't have an account?{' '}
+              <Link
+                href="#"
+                underline="hover"
+                sx={{
+                  color: '#2563eb',
+                  fontWeight: 700,
+                  '&:hover': { color: '#1d4ed8' }
+                }}
+              >
+                Register now
+              </Link>
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Right Column: Academic Showcase Card */}
+        <Box
+          sx={{
+            flex: 1.15,
+            display: { xs: 'none', md: 'flex' },
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            p: { md: 4, lg: 5 },
+            m: { md: 2 },
+            borderRadius: '28px',
+            bgcolor: 'rgba(240, 247, 255, 0.75)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(224, 231, 255, 0.9)',
             position: 'relative',
             overflow: 'hidden'
           }}
@@ -328,7 +394,7 @@ export const LoginPage: React.FC = () => {
               alignItems: 'center',
               gap: 1,
               px: 2,
-              py: 0.8,
+              py: 0.7,
               borderRadius: '999px',
               bgcolor: '#ffffff',
               border: '1px solid #dbeafe',
@@ -346,7 +412,7 @@ export const LoginPage: React.FC = () => {
             sx={{
               position: 'relative',
               width: '100%',
-              maxWidth: 480,
+              maxWidth: 440,
               my: 'auto',
               display: 'flex',
               justifyContent: 'center',
@@ -359,23 +425,23 @@ export const LoginPage: React.FC = () => {
               alt="Books and student studying illustration"
               sx={{
                 width: '95%',
-                maxHeight: 380,
+                maxHeight: 360,
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 12px 24px rgba(30, 58, 138, 0.06))'
+                filter: 'drop-shadow(0 12px 24px rgba(30, 58, 138, 0.08))'
               }}
             />
           </Box>
 
           {/* Tagline & Small Text */}
-          <Box sx={{ textAlign: 'center', maxWidth: 460 }}>
+          <Box sx={{ textAlign: 'center', maxWidth: 440, mb: 1 }}>
             <Typography
               variant="h5"
               sx={{
                 fontWeight: 800,
                 color: '#0f172a',
                 letterSpacing: '-0.02em',
-                fontSize: { md: '1.35rem', lg: '1.5rem' },
-                mb: 1
+                fontSize: { md: '1.3rem', lg: '1.45rem' },
+                mb: 0.8
               }}
             >
               Organize your learning. Achieve your goals.
@@ -384,8 +450,8 @@ export const LoginPage: React.FC = () => {
               variant="body2"
               sx={{
                 color: '#64748b',
-                fontSize: '0.95rem',
-                lineHeight: 1.6
+                fontSize: '0.925rem',
+                lineHeight: 1.55
               }}
             >
               Learn smarter, stay organized, and reach your goals with <strong>StudyFlow</strong>.
