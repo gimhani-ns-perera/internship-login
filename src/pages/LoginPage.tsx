@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Alert,
   Box,
+  Button,
   Divider,
   IconButton,
   Link,
@@ -12,48 +13,98 @@ import {
 import GoogleIcon from '@mui/icons-material/Google';
 import AppleIcon from '@mui/icons-material/Apple';
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
-import { signInWithPopup } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup, type Auth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { LoginForm } from '../components/LoginForm';
-import { auth, googleProvider, isFirebaseConfigured } from '../services/firebase';
 import meditationIllustration from '../assets/meditation-illustration.svg';
+
+// Firebase configuration from Vite environment variables
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
+};
+
+// Check whether valid Firebase credentials have been configured
+const isFirebaseConfigured = Boolean(
+  firebaseConfig.apiKey &&
+  firebaseConfig.apiKey !== 'undefined' &&
+  firebaseConfig.apiKey !== '' &&
+  !firebaseConfig.apiKey.includes('your_')
+);
+
+// Safely initialize Firebase without throwing uncaught exceptions on missing credentials
+let auth: Auth | null = null;
+let googleProvider: GoogleAuthProvider | null = null;
+
+if (isFirebaseConfigured) {
+  try {
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    googleProvider = new GoogleAuthProvider();
+  } catch (error: unknown) {
+    console.warn('Firebase initialization warning:', error);
+  }
+}
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [snackbarMessage, setSnackbarMessage] = useState<string>('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'info' | 'warning' | 'error'>('info');
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'info' | 'warning' | 'error' | 'success'>('info');
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [showDemoOption, setShowDemoOption] = useState<boolean>(false);
 
   const handleGoogleLogin = async () => {
-    if (!isFirebaseConfigured || !auth || !googleProvider) {
-      setSnackbarSeverity('warning');
-      setSnackbarMessage(
-        'Firebase credentials are not configured yet. Add your Firebase keys to .env to enable live Google sign-in.'
-      );
-      setSnackbarOpen(true);
+    // If Firebase is configured with valid credentials, use live Firebase Google Sign-In
+    if (isFirebaseConfigured && auth && googleProvider) {
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const accessToken = await result.user.getIdToken();
+        navigate('/dashboard', {
+          state: {
+            token: accessToken,
+            user: {
+              displayName: result.user.displayName || 'Google User',
+              email: result.user.email || '',
+              photoURL: result.user.photoURL || ''
+            }
+          }
+        });
+      } catch (err: unknown) {
+        const error = err as Error;
+        console.error('Google Sign-In Error:', error);
+        setSnackbarSeverity('error');
+        setSnackbarMessage(error.message || 'Google sign-in failed.');
+        setSnackbarOpen(true);
+      }
       return;
     }
 
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const accessToken = await result.user.getIdToken();
-      navigate('/dashboard', {
-        state: {
-          token: accessToken,
-          user: {
-            displayName: result.user.displayName,
-            email: result.user.email,
-            photoURL: result.user.photoURL
-          }
+    // If Firebase credentials are not in .env, display a helpful warning and show demo login option
+    setShowDemoOption(true);
+    setSnackbarSeverity('warning');
+    setSnackbarMessage(
+      'Firebase is not configured in .env. You can add your Firebase keys or click "Demo Google Login" below to test the token redirect.'
+    );
+    setSnackbarOpen(true);
+  };
+
+  const handleDemoGoogleLogin = () => {
+    const demoToken = `eyJhbGciOiJSUzI1NiIsImtpZCI6ImRlbW8ta2V5In0.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZGVtby1hcHAiLCJzdWIiOiIxMjM0NTY3ODkiLCJlbWFpbCI6ImRlbW8udXNlckBleGFtcGxlLmNvbSIsImF1ZCI6ImRlbW8tYXBwIiwiaWF0IjoxNzA4NTY3ODkwLCJleHAiOjE3MDg1NzE0OTB9.demo_access_token_signature_preview`;
+    navigate('/dashboard', {
+      state: {
+        token: demoToken,
+        user: {
+          displayName: 'Demo Google User',
+          email: 'demo.user@example.com',
+          photoURL: ''
         }
-      });
-    } catch (err: unknown) {
-      const error = err as Error;
-      console.error('Google Sign-In Error:', error);
-      setSnackbarSeverity('error');
-      setSnackbarMessage(error.message || 'Google sign-in failed');
-      setSnackbarOpen(true);
-    }
+      }
+    });
   };
 
   const handleAppleLogin = () => {
@@ -69,8 +120,10 @@ export const LoginPage: React.FC = () => {
   };
 
   const handleFormLoginSuccess = ({ username }: { username: string }) => {
+    const standardToken = `token_form_${Date.now()}_${btoa(username)}`;
     navigate('/dashboard', {
       state: {
+        token: standardToken,
         user: {
           displayName: username.includes('@') ? username.split('@')[0] : username,
           email: username.includes('@') ? username : `${username}@example.com`
@@ -133,7 +186,7 @@ export const LoginPage: React.FC = () => {
           {/* LoginForm Component */}
           <LoginForm onSuccess={handleFormLoginSuccess} />
 
-          {/* Other Element: Divider */}
+          {/* Divider */}
           <Divider
             sx={{
               my: 4,
@@ -145,7 +198,7 @@ export const LoginPage: React.FC = () => {
             or continue with
           </Divider>
 
-          {/* Other Element: Social Login Buttons */}
+          {/* Social Login Buttons */}
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2.2 }}>
             <IconButton
               onClick={handleGoogleLogin}
@@ -189,9 +242,34 @@ export const LoginPage: React.FC = () => {
               <FacebookRoundedIcon fontSize="small" />
             </IconButton>
           </Box>
+
+          {/* Demo Login Shortcut when Firebase credentials are not in .env */}
+          {showDemoOption && (
+            <Box sx={{ mt: 3, textAlign: 'center' }}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleDemoGoogleLogin}
+                sx={{
+                  borderRadius: '999px',
+                  borderColor: '#558b6e',
+                  color: '#346d4c',
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  fontSize: '0.8rem',
+                  '&:hover': {
+                    borderColor: '#346d4c',
+                    bgcolor: 'rgba(85, 139, 110, 0.08)'
+                  }
+                }}
+              >
+                Demo Google Login (Test accessToken)
+              </Button>
+            </Box>
+          )}
         </Box>
 
-        {/* Other Element: Bottom Registration Link */}
+        {/* Bottom Registration Link */}
         <Box sx={{ mt: 4 }}>
           <Typography variant="body2" sx={{ color: '#4a4e58', fontWeight: 500 }}>
             Not a member?{' '}
@@ -341,7 +419,7 @@ export const LoginPage: React.FC = () => {
       {/* Snackbar notification */}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={7000}
         onClose={() => setSnackbarOpen(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
